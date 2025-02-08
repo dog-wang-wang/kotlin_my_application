@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="text_message_edit">编辑信息</string>
+    <string name="text_message_edit_sex_boy">男生</string>
+    <string name="text_message_edit_sex_girl">女生</string>
+    <string name="text_message_edit_name">昵称</string>
+    <string name="text_message_edit_birthday">你的生日</string>
 </resources>

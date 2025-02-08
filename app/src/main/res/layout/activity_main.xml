@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/first_message_bar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/first_message_body">
+        app:layout_constraintBottom_toTopOf="@id/first_message_body"
+        >
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_message_edit"
-            android:textSize="@dimen/size_text_small"
+            android:textSize="@dimen/size_text_medium"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -36,16 +37,144 @@
         android:layout_height="0dp"
         android:id="@+id/first_message_body"
         app:layout_constraintTop_toBottomOf="@id/first_message_bar"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingHorizontal="@dimen/padding_big">
         <ImageView
             android:id="@+id/first_avatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_small"
+            app:layout_constraintBottom_toTopOf="@id/first_avatar_text"
+            android:layout_marginBottom="@dimen/margin_mini"
             />
+        <TextView
+            android:id="@+id/first_avatar_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/first_sex"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="@dimen/size_text_small"
+            android:text="点击更换头像"
+            android:layout_marginBottom="@dimen/margin_medium"
+
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/first_sex"
+            app:layout_constraintBottom_toTopOf="@id/first_name"
+            android:layout_marginBottom="@dimen/margin_small">
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:singleSelection="true"
+                >
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/first_sex_boy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_message_edit_sex_boy"
+                    android:textSize="@dimen/size_text_medium"
+                    android:textStyle="bold"
+                    android:checked="true"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    app:chipCornerRadius="@dimen/conner_big"
+                    app:chipStrokeWidth="0dp"
+                    app:chipBackgroundColor="@color/grey_small"
+                    app:chipIcon="@mipmap/boy"
+                    app:chipStartPadding="@dimen/padding_big_large"
+                    app:chipEndPadding="@dimen/padding_big_large"
+                    app:chipMinHeight="@dimen/min_height_small"
+                />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/first_sex_girl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_message_edit_sex_girl"
+                    android:textSize="@dimen/size_text_medium"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/margin_small"
+                    app:chipCornerRadius="@dimen/conner_big"
+                    app:chipStrokeWidth="0dp"
+                    app:chipBackgroundColor="@color/grey_small"
+                    app:chipIcon="@mipmap/girl"
+                    app:chipStartPadding="@dimen/padding_big_large"
+                    app:chipEndPadding="@dimen/padding_big_large"
+                    app:chipMinHeight="@dimen/min_height_small"
+                />
+            </com.google.android.material.chip.ChipGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/first_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_message_edit_name"
+                android:textSize="@dimen/size_text_large"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <EditText
+                android:maxLength="8"
+                android:id="@+id/edt_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                android:padding="@dimen/padding_big"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_style"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/first_year"
+            app:layout_constraintTop_toBottomOf="@id/first_name"
+            android:layout_marginTop="@dimen/margin_medium">
+            <TextView
+                android:id="@+id/tv_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_message_edit_birthday"
+                android:textSize="@dimen/size_text_large"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            <LinearLayout
+                android:id="@+id/lv_birthday"
+                app:layout_constraintTop_toBottomOf="@id/tv_birthday"
+                android:padding="@dimen/padding_big"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_style">
+                <TextView
+                    android:id="@+id/tv_birthday_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/lv_birthday"
+                    android:layout_weight="9"
+                    />
+                <ImageView
+                    android:id="@+id/iv_birthday"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/more"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

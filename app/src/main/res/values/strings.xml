@@ -5,4 +5,7 @@
     <string name="text_message_edit_sex_girl">女生</string>
     <string name="text_message_edit_name">昵称</string>
     <string name="text_message_edit_birthday">你的生日</string>
+    <string name="bottom_sheet_take_photo">拍照</string>
+    <string name="bottom_sheet_gallery">从相册选择</string>
+    <string name="bottom_sheet_cancel">取消</string>
 </resources>

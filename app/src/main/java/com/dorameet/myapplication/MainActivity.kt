@@ -1,7 +1,9 @@
 package com.dorameet.myapplication
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,6 +31,7 @@ import com.dorameet.myapplication.utils.ImageUtils
 import com.dorameet.myapplication.utils.PermissionUtils
 import com.dorameet.myapplication.utils.PermissionUtils.CheckPermissionListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     var tvPhoto  :TextView? = null
     var tvGallery :TextView? = null
     var tvCancel  :TextView? = null
+    var btnFinished: MaterialButton? = null
     //注册跳转相册和相机的请求码
     private val REQUEST_CODE_CAMERA = 100
     private val REQUEST_CODE_GALLERY = 101
@@ -144,10 +148,27 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        initSharedPreferences()
         initViews()
         initEvents()
         initAvatar()
+        initName()
         initChips()
+    }
+
+    private var sharedPreferences:SharedPreferences ? = null
+    private var editor:SharedPreferences.Editor? = null
+    private fun initSharedPreferences() {
+       sharedPreferences = getSharedPreferences(getString(R.string.shared_file_user), MODE_PRIVATE)
+        editor = sharedPreferences?.edit()
+    }
+
+    private fun initName() {
+        edt_name?.setText(sharedPreferences?.getString(getString(R.string.shared_user_name),""))
+        btnFinished?.setOnClickListener{
+            editor?.putString(getString(R.string.shared_user_name),edt_name?.text?.toString())
+            editor?.apply()
+        }
     }
 
     private fun initChips() {
@@ -186,12 +207,14 @@ class MainActivity : AppCompatActivity() {
         avatarView?.setImageBitmap(bitmap)
 //        loadAvatar()
     }
+
     //初始化控件
     private fun initViews() {
         avatarView = findViewById<ImageView>(R.id.first_avatar);
         edt_name = findViewById<EditText>(R.id.edt_name)
         chipBoy = findViewById<Chip>(R.id.first_sex_boy)
         chipGirl = findViewById<Chip>(R.id.first_sex_girl)
+        btnFinished = findViewById<MaterialButton>(R.id.first_btn_finish)
         //弹出更换头像的底部弹窗
         bottomDialogView = LayoutInflater.from(this).inflate(R.layout.layout_change_bottom_sheet, null)
         bottomDialog =BottomSheetDialog(this, R.style.BottomSheetDialog)

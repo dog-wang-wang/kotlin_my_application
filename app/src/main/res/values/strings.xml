@@ -9,4 +9,6 @@
     <string name="bottom_sheet_gallery">从相册选择</string>
     <string name="bottom_sheet_cancel">取消</string>
     <string name="user_avatar">avatar</string>
+    <string name="shared_file_user">user</string>
+    <string name="shared_user_name">username</string>
 </resources>

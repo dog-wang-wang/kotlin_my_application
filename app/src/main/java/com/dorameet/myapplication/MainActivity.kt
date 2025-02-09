@@ -1,19 +1,36 @@
 package com.dorameet.myapplication
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dorameet.myapplication.utils.DialogUtils
 import com.dorameet.myapplication.utils.ImageUtils
+import com.dorameet.myapplication.utils.PermissionUtils
+import com.dorameet.myapplication.utils.PermissionUtils.CheckPermissionListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
+
 
 class MainActivity : AppCompatActivity() {
     var avatarView: ImageView? = null
@@ -25,6 +42,40 @@ class MainActivity : AppCompatActivity() {
     var tvPhoto  :TextView? = null
     var tvGallery :TextView? = null
     var tvCancel  :TextView? = null
+    //注册跳转相册和相机的请求码
+    private val REQUEST_CODE_CAMERA = 100
+    private val REQUEST_CODE_GALLERY = 101
+    private val cameraLauncher = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            // 使用之前创建的uri
+            val data = result.data
+            if (data != null) {
+                val extras = data.extras
+                val bitmap =
+                    extras!!["data"] as Bitmap?
+                avatarView?.setImageBitmap(bitmap)
+            }
+        }
+    }
+    private val albumLauncher = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            // 获取图片
+            val uri = result.data!!.data
+            try {
+                // 通过URL获得一个BitMap
+                val bitmap =MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                avatarView?.setImageBitmap(bitmap)
+            } catch (e: IOException) {
+                Log.e("MainActivity", "获取相册图片失败")
+            }
+        }
+    }
+    private var snackBarGallery:Snackbar? = null
+    private var snackBarCamera:Snackbar? = null
     private var sex = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,21 +144,134 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun initEvents(){
+        //TODO：在这里要跳转到手势密码绑定页面
+        //如果不可以使用指纹就直接强制绑定手势密码，跳转到手势密码绑定页面
+        val dialogUtilPhoto: DialogUtils = DialogUtils(this)
+        val dialogPhoto: AlertDialog = dialogUtilPhoto.dialog
+        dialogUtilPhoto.setTitle("提示")
+            .setContent("适趣我爱说申请访问相机权限用于修改头像")
+            .setPositiveText("确定")
+            .setNegativeText("取消")
+            .setPositiveListener {
+                dialogPhoto.dismiss()
+                if (bottomDialog != null) {
+                    bottomDialog!!.dismiss()
+                }
+                //这里去申请相机权限
+                snackBarCamera =  PermissionUtils.checkPermission(findViewById(R.id.snack_bar_container_work), this,
+                    arrayListOf(Manifest.permission.CAMERA),
+                    object : CheckPermissionListener {
+                        override fun onHavePermission() {
+                            cameraLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE))
+                        }
+
+                        override fun noHavePermission(snackbar: Snackbar?) {
+                            //没有权限就会自动去申请权限
+                        }
+                    },
+                    REQUEST_CODE_CAMERA,
+                    "适趣我爱说申请访问相机权限用于修改头像"
+                    )
+
+            }
+            .setNegativeListener {
+                //不给权限不让用这个功能，结束这个弹窗
+                dialogPhoto.dismiss()
+            }.setCloseListener {
+                dialogPhoto.dismiss()
+            }
+        val dialogUtilGallery: DialogUtils = DialogUtils(this)
+        val dialogGallery: AlertDialog = dialogUtilGallery.dialog
+        dialogUtilGallery.setTitle("提示")
+            .setContent("适趣我爱说申请访问存储权限用于修改头像")
+            .setPositiveText("确定")
+            .setNegativeText("取消")
+            .setPositiveListener {
+                dialogGallery.dismiss()
+                if (bottomDialog != null) {
+                    bottomDialog!!.dismiss()
+                }
+                //这里去申请相册权限
+                //检测sdk版本是否大于33
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    //这里去申请相机权限
+                    snackBarGallery = PermissionUtils.checkPermission(findViewById(R.id.snack_bar_container_work), this,
+                        arrayListOf(Manifest.permission.READ_MEDIA_IMAGES),
+                        object : CheckPermissionListener {
+                            override fun onHavePermission() {
+                                albumLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+                            }
+
+                            override fun noHavePermission(snackbar: Snackbar?) {
+
+                            }
+
+                        },
+                        REQUEST_CODE_GALLERY,
+                        "适趣我爱说申请访问存储权限用于修改头像"
+                    )
+                }else{
+                    snackBarGallery = PermissionUtils.checkPermission(findViewById(R.id.snack_bar_container_work), this,
+                        arrayListOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        object : CheckPermissionListener {
+                            override fun onHavePermission() {
+                                albumLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+                            }
+
+                            override fun noHavePermission(snackbar: Snackbar?) {
+                                TODO("Not yet implemented")
+                            }
+                        },
+                        REQUEST_CODE_GALLERY,
+                        "适趣我爱说申请访问存储权限用于修改头像"
+                    )
+                }
+            }
+            .setNegativeListener {
+                //不给权限不让用这个功能，结束这个弹窗
+                dialogGallery.dismiss()
+            }.setCloseListener {
+                dialogGallery.dismiss()
+            }
         avatarView?.setOnClickListener {
             //弹出弹窗
             bottomDialog!!.show()
         }
         tvPhoto?.setOnClickListener {
             //拍照，这里要询问用户是否允许拍照
-
+            dialogPhoto.show()
         }
         tvGallery?.setOnClickListener {
             //相册,这里要询问用户是否允许打开相册
+            dialogGallery.show()
         }
         tvCancel?.setOnClickListener {
             //取消
             bottomDialog!!.dismiss()
         }
     }
-
+    //这里是回调方法
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_CAMERA) {
+            //首先关闭snackBar
+            snackBarCamera?.dismiss()
+            //如果用户允许了相机权限，就打开相机
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //打开相机
+                cameraLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE))
+            }
+        }else if (requestCode == REQUEST_CODE_GALLERY) {
+            //首先关闭snackBar
+            snackBarGallery?.dismiss()
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //打开相册
+                albumLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+            }
+        }
+    }
 }

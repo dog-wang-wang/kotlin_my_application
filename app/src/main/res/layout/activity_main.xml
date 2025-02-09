@@ -6,6 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/snack_bar_container_work"
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+    </LinearLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

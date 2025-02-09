@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
-        android:id="@+id/dialog_title"
+        android:id="@+id/dialog_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/dialog_body"
@@ -25,11 +25,12 @@
         android:id="@+id/dialog_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_title"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_image"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_big_large"
         android:background="@drawable/style_dialog">
         <TextView
+            android:id="@+id/dialog_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="提示"
@@ -41,6 +42,7 @@
             android:paddingBottom="@dimen/padding_medium"
             />
         <TextView
+            android:id="@+id/dialog_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="适趣我爱说申请访问相机权限用于修改头像"
@@ -54,6 +56,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/padding_medium">
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialog_button_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/grey_small"
@@ -61,6 +64,7 @@
                 android:text="取消"
                 android:layout_marginEnd="@dimen/padding_big"/>
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/dialog_button_yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_medium"

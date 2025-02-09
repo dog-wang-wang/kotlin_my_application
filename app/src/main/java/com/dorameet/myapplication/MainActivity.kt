@@ -5,10 +5,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +21,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
 import com.dorameet.myapplication.utils.DialogUtils
 import com.dorameet.myapplication.utils.ImageUtils
 import com.dorameet.myapplication.utils.PermissionUtils
@@ -29,6 +31,8 @@ import com.dorameet.myapplication.utils.PermissionUtils.CheckPermissionListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 
@@ -53,9 +57,18 @@ class MainActivity : AppCompatActivity() {
             val data = result.data
             if (data != null) {
                 val extras = data.extras
-                val bitmap =
-                    extras!!["data"] as Bitmap?
-                avatarView?.setImageBitmap(bitmap)
+                val bitmap = extras!!["data"] as Bitmap?
+                //把这张照片存入外存
+                saveAvatar(bitmap)
+                //然后重载头像
+                if(avatarView!=null) {
+                    Glide.with(this)
+                        .load(bitmap)
+                        .apply(RequestOptions.circleCropTransform())
+                        .placeholder(R.drawable.avatar)
+                        .error(R.drawable.avatar)
+                        .into(avatarView!!)
+                }
             }
         }
     }
@@ -68,12 +81,57 @@ class MainActivity : AppCompatActivity() {
             try {
                 // 通过URL获得一个BitMap
                 val bitmap =MediaStore.Images.Media.getBitmap(contentResolver, uri)
-                avatarView?.setImageBitmap(bitmap)
+                //把这张照片存入外存
+                saveAvatar(bitmap)
+                if(avatarView!=null) {
+                    Glide.with(this)
+                        .load(bitmap)
+                        .apply(RequestOptions.circleCropTransform())
+                        .placeholder(R.drawable.avatar)
+                        .error(R.drawable.avatar)
+                        .into(avatarView!!)
+                }
+
             } catch (e: IOException) {
                 Log.e("MainActivity", "获取相册图片失败")
             }
         }
     }
+
+    private fun saveAvatar(bitmap: Bitmap?) {
+        val imageAddress = getExternalFilesDir(null)!!.absolutePath + "/"+getString(R.string.user_avatar)
+        //然后把bitmap存入这个地方
+        val out = FileOutputStream(imageAddress)
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, out);
+        out.flush()
+        out.close()
+    }
+
+    private fun loadAvatar() {
+        val imgLocalAddress = getExternalFilesDir(null)!!.absolutePath + "/"+getString(R.string.user_avatar)
+        //首先检验本地目录是否存有这张头像
+        if (EmptyUtils.fileIsExist(imgLocalAddress)) {
+            if(avatarView!=null) {
+                Glide.with(this)
+                    .load(imgLocalAddress)
+                    .apply(RequestOptions.circleCropTransform())
+                    .placeholder(R.drawable.avatar)
+                    .error(R.drawable.avatar)
+                    .into(avatarView!!)
+            }
+        } else {
+            //获取到网络图片还要在本地存储一份
+            if(avatarView!=null) {
+                Glide.with(this)
+                    .load(R.drawable.avatar)
+                    .apply(RequestOptions.circleCropTransform())
+                    .placeholder(R.drawable.avatar)
+                    .error(R.drawable.avatar)
+                    .into(avatarView!!)
+            }
+        }
+    }
+
     private var snackBarGallery:Snackbar? = null
     private var snackBarCamera:Snackbar? = null
     private var sex = true
@@ -122,10 +180,11 @@ class MainActivity : AppCompatActivity() {
     //初始化头像形状
     private fun initAvatar() {
         //首先获取到图片
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.avatar)
+        var bitmap = BitmapFactory.decodeFile(getExternalFilesDir(null)!!.absolutePath + "/"+getString(R.string.user_avatar))
         bitmap = ImageUtils().getCircleBitmap(bitmap)
         //然后设置图片信息
         avatarView?.setImageBitmap(bitmap)
+//        loadAvatar()
     }
     //初始化控件
     private fun initViews() {

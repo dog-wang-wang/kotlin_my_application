@@ -22,8 +22,8 @@ class ImageUtils {
             (bitmap.getHeight() - cropWidth) / 2, cropWidth, cropWidth);
     }
 
-    fun getCircleBitmap(bitmap: Bitmap): Bitmap {//把图片裁剪成圆形
-        val rBitmap = cropBitmap(bitmap)//裁剪成正方形
+    fun getCircleBitmap(rbitmap: Bitmap): Bitmap {//把图片裁剪成圆形
+        val bitmap = cropBitmap(rbitmap)//裁剪成正方形
         try {
             val circleBitmap: Bitmap =
                 Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);

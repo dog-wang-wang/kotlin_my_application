@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/padding_small"
-            android:src="@mipmap/back"
+            android:src="@mipmap/ic_back"
             android:padding="@dimen/padding_medium"
             app:layout_constraintLeft_toLeftOf="parent" />
         <TextView
@@ -95,8 +95,8 @@
                     android:layout_marginEnd="@dimen/margin_small"
                     app:chipCornerRadius="@dimen/conner_big"
                     app:chipStrokeWidth="0dp"
-                    app:chipBackgroundColor="@color/grey_small"
-                    app:chipIcon="@mipmap/boy"
+                    app:chipBackgroundColor="@color/color_grey_small"
+                    app:chipIcon="@mipmap/ic_boy"
                     app:chipStartPadding="@dimen/padding_big_large"
                     app:chipEndPadding="@dimen/padding_big_large"
                     app:chipMinHeight="@dimen/min_height_small"
@@ -111,8 +111,8 @@
                     android:layout_marginStart="@dimen/margin_small"
                     app:chipCornerRadius="@dimen/conner_big"
                     app:chipStrokeWidth="0dp"
-                    app:chipBackgroundColor="@color/grey_small"
-                    app:chipIcon="@mipmap/girl"
+                    app:chipBackgroundColor="@color/color_grey_small"
+                    app:chipIcon="@mipmap/ic_girl"
                     app:chipStartPadding="@dimen/padding_big_large"
                     app:chipEndPadding="@dimen/padding_big_large"
                     app:chipMinHeight="@dimen/min_height_small"
@@ -142,7 +142,7 @@
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_style"/>
+                android:background="@drawable/style_edit"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -166,7 +166,7 @@
                 android:layout_marginTop="@dimen/margin_tiny"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_style">
+                android:background="@drawable/style_edit">
                 <TextView
                     android:id="@+id/tv_birthday_message"
                     android:layout_width="0dp"
@@ -179,7 +179,7 @@
                     android:id="@+id/iv_birthday"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/more"
+                    android:src="@mipmap/ic_more"
                     android:layout_weight="1"
                     />
             </LinearLayout>
@@ -189,9 +189,9 @@
             android:id="@+id/first_btn_finish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/blue_light"
+            android:backgroundTint="@color/color_blue_light"
             android:text="完成"
-            android:textColor="@color/white"
+            android:textColor="@color/color_white"
             android:textSize="@dimen/size_text_large"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

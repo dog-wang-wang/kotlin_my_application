@@ -2,13 +2,11 @@ package com.dorameet.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -27,7 +25,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
 import com.dorameet.myapplication.utils.DialogUtils
 import com.dorameet.myapplication.utils.ImageUtils
 import com.dorameet.myapplication.utils.PermissionUtils
@@ -40,7 +37,6 @@ import dev.aige.wheelpicker.WheelPicker
 import dev.aige.wheelpicker.widgets.WheelDayPicker
 import dev.aige.wheelpicker.widgets.WheelMonthPicker
 import dev.aige.wheelpicker.widgets.WheelYearPicker
-import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
@@ -80,8 +76,8 @@ class MainActivity : AppCompatActivity() {
                     Glide.with(this)
                         .load(bitmap)
                         .apply(RequestOptions.circleCropTransform())
-                        .placeholder(R.drawable.avatar)
-                        .error(R.drawable.avatar)
+                        .placeholder(R.drawable.image_avatar)
+                        .error(R.drawable.image_avatar)
                         .into(avatarView!!)
                 }
             }
@@ -102,8 +98,8 @@ class MainActivity : AppCompatActivity() {
                     Glide.with(this)
                         .load(bitmap)
                         .apply(RequestOptions.circleCropTransform())
-                        .placeholder(R.drawable.avatar)
-                        .error(R.drawable.avatar)
+                        .placeholder(R.drawable.image_avatar)
+                        .error(R.drawable.image_avatar)
                         .into(avatarView!!)
                 }
 
@@ -132,18 +128,18 @@ class MainActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(imgLocalAddress)
                     .apply(RequestOptions.circleCropTransform())
-                    .placeholder(R.drawable.avatar)
-                    .error(R.drawable.avatar)
+                    .placeholder(R.drawable.image_avatar)
+                    .error(R.drawable.image_avatar)
                     .into(avatarView!!)
             }
         } else {
             //获取到网络图片还要在本地存储一份
             if(avatarView!=null) {
                 Glide.with(this)
-                    .load(R.drawable.avatar)
+                    .load(R.drawable.image_avatar)
                     .apply(RequestOptions.circleCropTransform())
-                    .placeholder(R.drawable.avatar)
-                    .error(R.drawable.avatar)
+                    .placeholder(R.drawable.image_avatar)
+                    .error(R.drawable.image_avatar)
                     .into(avatarView!!)
             }
         }
@@ -203,15 +199,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showChip() {
         if (sex) {
-            chipBoy?.setChipStrokeColorResource(R.color.blue)
+            chipBoy?.setChipStrokeColorResource(R.color.color_blue)
             chipBoy?.setChipStrokeWidthResource(R.dimen.border_small)
-            chipGirl?.setChipStrokeColorResource(R.color.color_no)
+            chipGirl?.setChipStrokeColorResource(R.color.color_color_no)
             chipGirl?.setChipStrokeWidthResource(R.dimen.border_null)
 
         } else {
-            chipGirl?.setChipStrokeColorResource(R.color.blue)
+            chipGirl?.setChipStrokeColorResource(R.color.color_blue)
             chipGirl?.setChipStrokeWidthResource(R.dimen.border_small)
-            chipBoy?.setChipStrokeColorResource(R.color.color_no)
+            chipBoy?.setChipStrokeColorResource(R.color.color_color_no)
             chipBoy?.setChipStrokeWidthResource(R.dimen.border_null)
         }
     }
@@ -224,7 +220,7 @@ class MainActivity : AppCompatActivity() {
         if (EmptyUtils.fileIsExist(imgLocalAddress)) {
             bitmap = BitmapFactory.decodeFile(imgLocalAddress)
         } else {
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.avatar)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.image_avatar)
         }
         bitmap = ImageUtils().getCircleBitmap(bitmap)
         //然后设置图片信息

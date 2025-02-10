@@ -6,8 +6,8 @@
             android:shape="rectangle">
             <gradient
                 android:angle="0"
-                android:startColor="@color/blue_medium"
-                android:endColor="@color/blue_mid"
+                android:startColor="@color/color_blue_medium"
+                android:endColor="@color/color_blue_mid"
                 android:type="linear" />
             <!-- 开始颜色，透明度为50%（128/255）的蓝色 -->
             <!-- 结束颜色，透明度为50%（128/255）的青色 -->
@@ -24,7 +24,7 @@
                 android:topRightRadius="28dp"
                 android:bottomLeftRadius="28dp"
                 android:bottomRightRadius="28dp"/><!--圆角处理-->
-            <solid android:color="@color/white"/>
+            <solid android:color="@color/color_white"/>
         </shape>
     </item>
 </layer-list>

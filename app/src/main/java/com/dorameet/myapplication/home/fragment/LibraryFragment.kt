@@ -12,6 +12,7 @@ import com.dorameet.myapplication.R
 import com.dorameet.myapplication.home.adapter.SortAdapter
 import com.dorameet.myapplication.home.data.SortData
 import com.dorameet.myapplication.utils.OkHttpUtils
+import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
@@ -23,6 +24,7 @@ import java.io.IOException
 class LibraryFragment : Fragment(){
     var sortRecyclerView: RecyclerView? = null
     var typeList:MutableList<SortData> = ArrayList()
+    var chips:ChipGroup? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +32,7 @@ class LibraryFragment : Fragment(){
     ): View? {
         val view = inflater.inflate(R.layout.fragment_library, container, false)
         sortRecyclerView = view.findViewById<RecyclerView>(R.id.rv_sort)
+        chips = view.findViewById<ChipGroup>(R.id.grade_chips)
         typeList.add(SortData(0,"精选阅读"))
         //在这里还要发送网络请求
         initData()
@@ -62,6 +65,60 @@ class LibraryFragment : Fragment(){
                             val a = data.getData()
                             a?.let { typeList.addAll(it) }
                             sortRecyclerView?.adapter?.notifyDataSetChanged()
+                        }
+                    }else{
+                        showToast("网络请求失败")
+                    }
+                }else{
+                    showToast(response.message)
+                }
+            }
+            fun showToast(text:String){
+                activity?.runOnUiThread{
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        val requestGrade = okHttpUtils.createBuilder("http://test.shiqu.zhilehuo.com", "/englishgpt/appArticle/selectList").addHeader("Cookie", "sid=OFvEbpyl4PyKkc/cSjl2tW3g5Ga/z5DPSQRGQn8mJBs=").get().build()
+        okHttpUtils.sendRequest(requestGrade, object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                showToast(e.message.toString())
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(call: Call, response: Response) {
+                //这里接收网络数据
+                if (response.code==200) {
+                    val responseData = response.body?.string()
+                    if (responseData != null) {
+                        //在这里处理数据
+                        val gson = Gson()
+                        val data:com.dorameet.myapplication.Result<MutableList<Int>> = gson.fromJson(responseData, (object:TypeToken<com.dorameet.myapplication.Result<MutableList<Int>>>(){}).type)
+                        //在这里遍历集合
+                        val a = data.getData()
+                        a?.forEach {
+                            val chip = com.google.android.material.chip.Chip(context)
+                            chip.text = it.toString()
+                            chip.isCheckable = true
+                            chip.isCheckedIconVisible = false
+                            chip.chipBackgroundColor = context?.getColorStateList(R.color.color_white)
+                            chip.chipCornerRadius = 100f
+                            chip.chipStrokeColor = context?.getColorStateList(R.color.color_color_no)
+                            chip.setOnCheckedChangeListener { buttonView, isChecked ->
+                                if (isChecked) {
+                                    //选中
+                                    chip.setTextColor(context?.getColor(R.color.color_blue)!!)
+                                    chip.chipStrokeColor = context?.getColorStateList(R.color.color_blue)
+                                } else {
+                                    //取消选中
+                                    chip.setTextColor(context?.getColor(R.color.color_grey_big)!!)
+                                    chip.chipStrokeColor = context?.getColorStateList(R.color.color_color_no)
+                                }
+                            }
+                            //然后展示数据
+                            activity?.runOnUiThread{
+                                chips?.addView(chip)
+                            }
                         }
                     }else{
                         showToast("网络请求失败")

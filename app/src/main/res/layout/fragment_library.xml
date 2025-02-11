@@ -49,6 +49,17 @@
                     android:text="难度值:"
                     android:gravity="center"
                     android:paddingStart="@dimen/padding_large"/>
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.google.android.material.chip.ChipGroup
+                        app:singleSelection="true"
+                        app:singleLine="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/grade_chips">
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
 <!--                <androidx.recyclerview.widget.RecyclerView-->
 <!--                    android:id="@+id/library_recycler_view"-->
 <!--                    android:layout_width="match_parent"-->

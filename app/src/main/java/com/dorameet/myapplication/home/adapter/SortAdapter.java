@@ -13,6 +13,7 @@ import com.dorameet.myapplication.R;
 import com.dorameet.myapplication.Result;
 import com.dorameet.myapplication.home.data.SortData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**

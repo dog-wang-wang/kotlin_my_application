@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_front"
+        android:title="首页"
+        android:icon="@mipmap/ic_front"
+        />
+    <item
+        android:id="@+id/navigation_listener"
+        android:title="听力"
+        android:icon="@mipmap/ic_listener"
+         />
+    <item
+        android:id="@+id/navigation_library"
+        android:title="文库"
+        android:icon="@mipmap/ic_library"
+         />
+    <item
+        android:id="@+id/navigation_me"
+        android:title="我的"
+        android:icon="@mipmap/ic_me"
+         />
+</menu>

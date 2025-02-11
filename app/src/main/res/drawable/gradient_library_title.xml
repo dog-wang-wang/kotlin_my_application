@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:startColor="@color/color_blue_alpha"
+                android:centerColor="@color/color_green_alpha"
+                android:centerX="60%"
+                android:endColor="@color/color_white"
+                android:type="linear"/>
+            <!-- 开始颜色，透明度为50%（128/255）的蓝色 -->
+            <!-- 结束颜色，透明度为50%（128/255）的青色 -->
+        </shape>
+    </item>
+
+
+</selector>

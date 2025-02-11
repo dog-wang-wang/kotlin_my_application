@@ -6,5 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SecondActivity">
-
+<!--    这个页面的成部分是一个主界面和下面的导航栏-->
+    <LinearLayout
+        android:id="@+id/base_content"
+        app:layout_constraintBottom_toTopOf="@id/navigation_rail"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.fragment.app.FragmentContainerView
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:id="@+id/fragments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/navigation_home"
+            app:defaultNavHost="false"/>
+    </LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:backgroundTint="@color/color_white"
+        style="@style/Widget.Material3.BottomNavigationView"
+        android:id="@+id/navigation_rail"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        app:menu="@menu/menu_navigation"
+        app:itemIconSize="18dp"
+        app:labelVisibilityMode="labeled"
+        app:activeIndicatorLabelPadding="2dp"
+        app:itemPaddingTop="8dp"
+        app:itemPaddingBottom="0dp"
+        app:itemTextColor="@color/selector_color_navigation_text"
+        app:itemIconTint="@color/selector_color_navigation_icon"
+        app:itemRippleColor="@null"
+        app:itemActiveIndicatorStyle="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

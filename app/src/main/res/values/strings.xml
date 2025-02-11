@@ -12,4 +12,5 @@
     <string name="shared_file_user">user</string>
     <string name="shared_user_name">username</string>
     <string name="shared_user_birthday">user_birthday</string>
+    <string name="string_library_title">文库</string>
 </resources>

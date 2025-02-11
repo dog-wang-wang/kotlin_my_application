@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_home"
+    app:startDestination="@+id/navigation_front">
+    <fragment
+    android:id="@+id/navigation_front"
+    android:name="com.dorameet.myapplication.home.fragment.HomeFragment"
+    android:label="fragment_home"
+    tools:layout="@layout/fragment_home">
+    </fragment>
+    <fragment
+    android:id="@+id/navigation_listener"
+    android:name="com.dorameet.myapplication.home.fragment.ListenerFragment"
+    android:label="fragment_listener"
+    tools:layout="@layout/fragment_listener">
+    </fragment>
+    <fragment
+    android:id="@+id/navigation_library"
+    android:name="com.dorameet.myapplication.home.fragment.LibraryFragment"
+    android:label="fragment_library"
+    tools:layout="@layout/fragment_library">
+    </fragment>
+    <fragment
+    android:id="@+id/navigation_me"
+    android:name="com.dorameet.myapplication.home.fragment.MeFragment"
+    android:label="fragment_me"
+    tools:layout="@layout/fragment_me">
+    </fragment>
+
+</navigation>

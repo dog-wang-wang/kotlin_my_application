@@ -49,14 +49,22 @@ class LibraryFragment : Fragment(){
         chips = view.findViewById<ChipGroup>(R.id.grade_chips)
         typeList.add(SortData(0,"精选阅读"))
         //在这里还要发送网络请求
-        sortRecyclerView?.adapter  = SortAdapter(typeList,context,R.layout.item_sort){
-            currentTypeId = it
-            initArticleData()
-        }
+        sortRecyclerView?.adapter  =
+            context?.let {
+                SortAdapter(typeList, it,R.layout.item_sort,object : SortAdapter.OnTypeItemClickListener{
+                    override fun onItemClick(position: Int) {
+                        currentTypeId = position
+                        initArticleData()
+                    }
+                })
+            }
         initData()
         sortRecyclerView?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         //在这里要请求文章数据
-        articleRecyclerView?.adapter  = ArticleAdapter(articleList, context,R.layout.item_article)
+        articleRecyclerView?.adapter  = context?.let {
+            ArticleAdapter(articleList,
+                it,R.layout.item_article)
+        }
         initArticleData()
         articleRecyclerView?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         //上拉刷新

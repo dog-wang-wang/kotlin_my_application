@@ -71,16 +71,32 @@
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
             </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:paddingHorizontal="@dimen/padding_small"
-                android:id="@+id/rv_article"
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/refrestLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:scrollbars="none"
-                tools:itemCount="100"
-                tools:listitem="@layout/item_article"
-                />
+                android:layout_height="match_parent">
+                <com.scwang.smart.refresh.header.ClassicsHeader
+                    android:id="@+id/refresh_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:id="@+id/rv_article"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:scrollbars="none"
+                    tools:itemCount="100"
+                    tools:listitem="@layout/item_article"
+                    />
+                <com.scwang.smart.refresh.footer.ClassicsFooter
+                    android:id="@+id/refresh_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

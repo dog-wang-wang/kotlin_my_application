@@ -18,6 +18,7 @@ import com.dorameet.myapplication.utils.OkHttpUtils
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -32,9 +33,10 @@ class LibraryFragment : Fragment(){
     var currentTypeId:Int = 0
     var currentLexile:Int = 5
     val articleList:MutableList<ArticleData> = ArrayList()
-    var pageNum:Int? = null
-    var pageSize :Int? = null
+    var pageNum:Int = 1
+    var pageSize :Int = 10
     var total:Int? = null
+    var refreshLayout:SmartRefreshLayout? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,21 +45,41 @@ class LibraryFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_library, container, false)
         sortRecyclerView = view.findViewById<RecyclerView>(R.id.rv_sort)
         articleRecyclerView = view.findViewById<RecyclerView>(R.id.rv_article)
+        refreshLayout = view.findViewById<SmartRefreshLayout>(R.id.refrestLayout)
         chips = view.findViewById<ChipGroup>(R.id.grade_chips)
         typeList.add(SortData(0,"精选阅读"))
         //在这里还要发送网络请求
-        sortRecyclerView?.adapter  = SortAdapter(typeList,context,R.layout.item_sort)
+        sortRecyclerView?.adapter  = SortAdapter(typeList,context,R.layout.item_sort){
+            currentTypeId = it
+            initArticleData()
+        }
         initData()
         sortRecyclerView?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         //在这里要请求文章数据
         articleRecyclerView?.adapter  = ArticleAdapter(articleList, context,R.layout.item_article)
         initArticleData()
         articleRecyclerView?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        //上拉刷新
+        refreshLayout?.setOnLoadMoreListener{
+            LoadMoreData()
+        }
+        //下拉加载
+        refreshLayout?.setOnRefreshListener{
+            initArticleData()
+        }
         return view
     }
 
     private fun initArticleData() {
-        getArticleList()
+        pageNum = 1
+        articleGetFunction { data->
+            articleList.clear()
+            data.getData()?.list?.let {
+                articleList.addAll(it)
+            }
+            refreshLayout?.finishRefresh()
+            (articleRecyclerView?.adapter as ArticleAdapter).notifyChange()
+        }
     }
 
     private val okHttpUtils: OkHttpUtils = OkHttpUtils()
@@ -130,6 +152,8 @@ class LibraryFragment : Fragment(){
                                     //选中
                                     chip.setTextColor(context?.getColor(R.color.color_blue)!!)
                                     chip.chipStrokeColor = context?.getColorStateList(R.color.color_blue)
+                                    currentLexile = it
+                                    initArticleData()
                                 } else {
                                     //取消选中
                                     chip.setTextColor(context?.getColor(R.color.color_grey_big)!!)
@@ -139,6 +163,12 @@ class LibraryFragment : Fragment(){
                             //然后展示数据
                             activity?.runOnUiThread{
                                 chips?.addView(chip)
+                                if (it == currentLexile) {
+                                    chip.isChecked = true
+                                    chip.setTextColor(context?.getColor(R.color.color_blue)!!)
+                                    chip.chipStrokeColor = context?.getColorStateList(R.color.color_blue)
+                                    currentLexile = it
+                                }
                             }
                         }
                     }else{
@@ -157,10 +187,22 @@ class LibraryFragment : Fragment(){
         //这个请求用来请求分数值
 
     }
-    private fun getArticleList(){
+    private fun LoadMoreData(){
+        pageNum+=1
+        articleGetFunction { its ->
+            its.getData()?.list?.let {
+                articleList.addAll(it)
+            }
+            (articleRecyclerView?.adapter as ArticleAdapter).notifyChange()
+            refreshLayout?.finishLoadMore()
+        }
+    }
+    //这个函数接收一个函数作为参数，并且在获取到网络请求的结果后进行调用
+    private fun articleGetFunction(articleGetMethod : (com.dorameet.myapplication.Result<ArticleResponse>) -> Unit){
         val hashMap:HashMap<String,Int> = HashMap()
         hashMap["lexile"] = currentLexile
         hashMap["typeId"] = currentTypeId
+        hashMap["page"] = pageNum
         val requestArticle = okHttpUtils.createBuilder("http://test.shiqu.zhilehuo.com", "/englishgpt/library/articleList",hashMap).addHeader("Cookie", "sid=OFvEbpyl4PyKkc/cSjl2tW3g5Ga/z5DPSQRGQn8mJBs=").get().build()
         okHttpUtils.sendRequest(requestArticle, object : Callback{
             override fun onFailure(call: Call, e: IOException) {
@@ -179,14 +221,11 @@ class LibraryFragment : Fragment(){
                         val data:com.dorameet.myapplication.Result<ArticleResponse> = gson.fromJson(responseData, (object:TypeToken<com.dorameet.myapplication.Result<ArticleResponse>>(){}).type)
                         //然后把数据添加到list当中
                         //并且更新现在的页号和总页数以及业内数据条数
-                        pageNum = data.getData()?.pages
-                        pageSize = data.getData()?.pageSize
+                        pageSize = data.getData()?.pageSize!!
                         total = data.getData()?.total
                         activity?.runOnUiThread{
-                            data.getData()?.list?.let {
-                                articleList.addAll(it)
-                            }
-                            (articleRecyclerView?.adapter as ArticleAdapter).notifyChange()
+                            refreshLayout?.setNoMoreData(data.getData()?.isLastPage!!);
+                            articleGetMethod(data)
                         }
                     }else{
                         showToast("网络请求失败")
@@ -201,6 +240,5 @@ class LibraryFragment : Fragment(){
                 }
             }
         })
-        //这个请求用来请求分数值
     }
 }

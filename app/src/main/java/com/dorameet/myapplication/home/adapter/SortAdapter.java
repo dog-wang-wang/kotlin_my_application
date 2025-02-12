@@ -24,7 +24,10 @@ public class SortAdapter extends RecyclerView.Adapter<SortViewHolder> {
     private Context mContext;
     private int layoutId;
     private SortViewHolder viewHolder;
-
+    public OnTypeItemClickListener onTypeItemClickListener;
+    public interface OnTypeItemClickListener{
+        void onItemClick(int position);
+    }
     public int getSelectedPosition() {
         return selectedPosition;
     }
@@ -35,10 +38,11 @@ public class SortAdapter extends RecyclerView.Adapter<SortViewHolder> {
 
     private int selectedPosition = 0;
 
-    public SortAdapter(List<SortData> mList, Context mContext, int layoutId) {
+    public SortAdapter(List<SortData> mList, Context mContext, int layoutId, OnTypeItemClickListener onTypeItemClickListener) {
         this.mList = mList;
         this.mContext = mContext;
         this.layoutId = layoutId;
+        this.onTypeItemClickListener = onTypeItemClickListener;
     }
 
     @NonNull
@@ -79,14 +83,14 @@ public class SortAdapter extends RecyclerView.Adapter<SortViewHolder> {
             public void onClick(View v) {
                 //首先在这里更改selectedPosition
                 selectedPosition = a;
+                //同时还要更改fragment中的typeId
+                onTypeItemClickListener.onItemClick(sortData.getId());
                 //然后通知数据源更新
                 notifyDataSetChanged();
             }
-
         });
 
     }
-
     @Override
     public int getItemCount() {
         return mList.size();

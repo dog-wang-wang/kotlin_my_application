@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height_large"
+    android:maxHeight="@dimen/item_height_large"
+    android:minHeight="@dimen/item_height_large"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/padding_small">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_mid"
+        android:maxHeight="@dimen/item_height_mid"
+        android:minHeight="@dimen/item_height_mid"
+        android:background="@drawable/style_item_article">
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_article"
+            android:layout_width="@dimen/item_width"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/margin_mini"
+            android:layout_marginVertical="@dimen/margin_tiny"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:id="@+id/iv_article"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:src="@drawable/image_dialog" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_tiny"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_article_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/padding_medium"
+                    android:maxLines="2"
+                    android:textSize="@dimen/size_text_large"
+                    android:textStyle="bold"
+                    tools:text="Morning Birdsong MyFirstTrip to Farm" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/padding_small">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/ic_difficulty" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="难度:"
+                            android:textColor="@color/color_blue_mid"
+                            android:textSize="@dimen/size_text_small" />
+
+                        <TextView
+                            android:id="@+id/tv_article_difficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/color_blue_mid"
+                            android:textSize="@dimen/size_text_small"
+                            tools:text="60" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/ic_word_num" />
+
+                        <TextView
+                            android:id="@+id/tv_article_word_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            tools:text="115词" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/ll_conner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/style_item_article_type">
+
+                    <TextView
+                        android:id="@+id/tv_article_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_large"
+                        android:textColor="@color/color_white"
+                        tools:text="休闲生活" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

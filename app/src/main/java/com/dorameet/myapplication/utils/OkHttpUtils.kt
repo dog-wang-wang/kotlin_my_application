@@ -37,7 +37,7 @@ class OkHttpUtils() {
         return builder.url(ip + path)
     }
 
-    fun createBuilder(ip: String, path: String, params: HashMap<String?, *>): Request.Builder {
+    fun createBuilder(ip: String, path: String, params: HashMap<String, *>): Request.Builder {
         val builder = Request.Builder()
         val url = ip + path
         val sb = StringBuilder()

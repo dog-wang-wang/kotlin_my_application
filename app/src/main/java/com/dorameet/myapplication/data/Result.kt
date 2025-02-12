@@ -1,4 +1,4 @@
-package com.dorameet.myapplication
+package com.dorameet.myapplication.data
 
 /**
  * @author 11230

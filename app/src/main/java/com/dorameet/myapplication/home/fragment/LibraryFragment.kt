@@ -15,6 +15,7 @@ import com.dorameet.myapplication.home.data.ArticleData
 import com.dorameet.myapplication.home.data.ArticleResponse
 import com.dorameet.myapplication.home.data.SortData
 import com.dorameet.myapplication.utils.OkHttpUtils
+import com.dorameet.myapplication.data.Result
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -108,7 +109,7 @@ class LibraryFragment : Fragment(){
                     if (responseData != null) {
                         //在这里处理数据
                         val gson = Gson()
-                        val data:com.dorameet.myapplication.Result<MutableList<SortData>> = gson.fromJson(responseData, (object:TypeToken<com.dorameet.myapplication.Result<MutableList<SortData>>>(){}).type)
+                        val data: Result<MutableList<SortData>> = gson.fromJson(responseData, (object:TypeToken<Result<MutableList<SortData>>>(){}).type)
                         //然后展示数据
                         activity?.runOnUiThread{
                             val a = data.getData()
@@ -144,7 +145,7 @@ class LibraryFragment : Fragment(){
                     if (responseData != null) {
                         //在这里处理数据
                         val gson = Gson()
-                        val data:com.dorameet.myapplication.Result<MutableList<Int>> = gson.fromJson(responseData, (object:TypeToken<com.dorameet.myapplication.Result<MutableList<Int>>>(){}).type)
+                        val data: Result<MutableList<Int>> = gson.fromJson(responseData, (object:TypeToken<Result<MutableList<Int>>>(){}).type)
                         //在这里遍历集合
                         val a = data.getData()
                         a?.forEach {
@@ -206,7 +207,7 @@ class LibraryFragment : Fragment(){
         }
     }
     //这个函数接收一个函数作为参数，并且在获取到网络请求的结果后进行调用
-    private fun articleGetFunction(articleGetMethod : (com.dorameet.myapplication.Result<ArticleResponse>) -> Unit){
+    private fun articleGetFunction(articleGetMethod : (Result<ArticleResponse>) -> Unit){
         val hashMap:HashMap<String,Int> = HashMap()
         hashMap["lexile"] = currentLexile
         hashMap["typeId"] = currentTypeId
@@ -226,7 +227,7 @@ class LibraryFragment : Fragment(){
                         //在这里处理数据
                         val gson = Gson()
                         //这里获取到最新的数据
-                        val data:com.dorameet.myapplication.Result<ArticleResponse> = gson.fromJson(responseData, (object:TypeToken<com.dorameet.myapplication.Result<ArticleResponse>>(){}).type)
+                        val data: Result<ArticleResponse> = gson.fromJson(responseData, (object:TypeToken<Result<ArticleResponse>>(){}).type)
                         //然后把数据添加到list当中
                         //并且更新现在的页号和总页数以及业内数据条数
                         pageSize = data.getData()?.pageSize!!

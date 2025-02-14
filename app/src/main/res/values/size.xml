@@ -27,4 +27,6 @@
     <dimen name="item_height_mid">117dp</dimen>
     <dimen name="item_width_large">250dp</dimen>
     <dimen name="item_width">105dp</dimen>
+    <dimen name="third_btn_size">50dp</dimen>">
+    <dimen name="third_radio">25dp</dimen>">
 </resources>

@@ -26,5 +26,9 @@ class IndexActivity : AppCompatActivity() {
             .setOnClickListener {
                 startActivity(Intent(this, SecondActivity::class.java))
             }
+        findViewById<MaterialButton>(R.id.btn_third)
+            .setOnClickListener {
+                startActivity(Intent(this, ThirdActivity::class.java))
+            }
     }
 }

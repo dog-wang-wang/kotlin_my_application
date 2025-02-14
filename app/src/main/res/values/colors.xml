@@ -30,4 +30,6 @@
     <color name="color_FFDD4ABC">#FFDD4ABC</color>
     <color name="color_FFA38C42">#FFA38C42</color>
     <color name="color_FF077547">#FF077547</color>
+    <color name="color_purple">#A375F6</color>
+    <color name="color_white_purple">#E5DAF8</color>
 </resources>

@@ -1,7 +1,10 @@
 package com.dorameet.myapplication.third.data
 
 class SentenceData {
-    val word: String? = null
-    val wb: Int? = null
-    val we: Int? = null
+    var word: String? = null
+    var wb: Int? = null
+    var we: Int? = null
+    override fun toString(): String {
+        return "{\"word\":\"$word\",\"wb\":$wb,\"we\":$we}"
+    }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fragment_param_content">content</string>
+    <string name="fragment_param_imgUrl">imgUrl</string>
+    <string name="fragment_param_sentence_split">sentence_split</string>
+</resources>

@@ -31,7 +31,7 @@ class ThirdActivity : AppCompatActivity() {
     var progressBar:LinearProgressIndicator? = null
     var tvNumerator: TextView? = null
     var tvDenominator: TextView? = null
-    var data : ArrayList<Fragment> = ArrayList()
+    var dataList : ArrayList<Fragment> = ArrayList()
     var page:Int =1;
     var sumPage:Int = 1;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,17 +46,11 @@ class ThirdActivity : AppCompatActivity() {
         initViews()
         //获取文本信息
         initData()
-        data.add(ContentFragment())
-        data.add(ContentFragment())
-        data.add(ContentFragment())
-        data.add(ContentFragment())
-        data.add(ContentFragment())
-        viewPager?.adapter = ContentFragmentAdapter(this, data)
         viewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 page = position+1
                 if (sumPage!=1) {
-                    Toast.makeText(this@ThirdActivity, "已加载完所有数据$sumPage", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@ThirdActivity, "已加载完所有数据$sumPage", Toast.LENGTH_SHORT).show()
                     progressBar?.setProgress(100*page/sumPage)
                     tvNumerator?.setText(page.toString())
                 }
@@ -92,6 +86,20 @@ class ThirdActivity : AppCompatActivity() {
                             tvDenominator?.setText(data.getData()?.readCount.toString())
                             progressBar?.setProgress(100/sumPage)
                             //然后还要创建出来这五个文章
+                            var num: Int = 0
+                            data.getData()?.contentList?.forEach {
+                                val fragment = ContentFragment()
+                                fragment.setArguments(Bundle().apply {
+                                    // 这里要传两个参数，一个是文章内容，一个是图片地址
+                                    putString(getString(R.string.fragment_param_content), it.sentence)
+                                    putString(getString(R.string.fragment_param_imgUrl), data.getData()?.imgList?.get(num))
+                                    //还需要传递时间切片信息
+                                    putString(getString(R.string.fragment_param_sentence_split), it.sentenceByXFList.toString())
+                                })
+                                dataList.add(fragment)
+                                num++
+                            }
+                            viewPager?.adapter = ContentFragmentAdapter(this@ThirdActivity, dataList)
                         }
                     }else{
                         showToast("网络请求失败")

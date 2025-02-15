@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -48,8 +49,18 @@ public class ContentFragment extends Fragment {
     private ForegroundColorSpan foregroundColorSpan;
     private ForegroundColorSpan originColorSpan;
     private int hasRead = 0;
-    private Handler handler;
-
+    private Thread thread;
+    private Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(@NonNull android.os.Message msg) {
+            super.handleMessage(msg);
+            //在这里进行更新
+            getActivity().runOnUiThread(()->{
+                spannableStringBuilder.setSpan(foregroundColorSpan, 0, hasRead, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvArticleContent.setText(spannableStringBuilder);
+            });
+        }
+    };
     public ContentFragment(SoundManagerForThird soundManagerForThird){
         this.soundManagerForThird = soundManagerForThird;
     }
@@ -93,8 +104,20 @@ public class ContentFragment extends Fragment {
             }
         });
         btnRepeat.setOnClickListener(v -> {
-            soundManagerForThird.repeatContentSound();
+            //在这里停止原来的检测线程
+            spannableStringBuilder = new SpannableStringBuilder();
+            //把文本加入到这个控制器当中
+            spannableStringBuilder.append(content);
             resetTvArticleContentColor();
+            if (thread != null){
+                thread.interrupt();
+            }
+            thread = new Thread(()->{
+            soundManagerForThird.repeatContentSound();
+                //然后开启一个新的线程
+                checkTime();
+            });
+            thread.start();
         });
     }
 
@@ -111,38 +134,40 @@ public class ContentFragment extends Fragment {
         super.onStart();
         //在这里开始阅读
         //然后要加上一个监听器，监听播放时间，然后根据播放时间设置文本的显示颜色
-        new Thread(()->{
+        thread =  new Thread(()->{
             soundManagerForThird.playContentSound(audioUrl, mp -> {
                 //当播放完成之后要重置颜色
                 getActivity().runOnUiThread(()->{
                     resetTvArticleContentColor();
                 });
             });
-            for(SentenceData sentenceData : sentenceSplit){
-                //一句一句的执行
-                while(true) {
-                    try {
-                        int currentTime = soundManagerForThird.getContentSoundMediaPlayer().getCurrentPosition();
-                        if (currentTime >= sentenceData.getWb()){
-                            int length = sentenceData.getWord().length();
-                            hasRead+= length;
-                            if (hasRead >=content.length()){
-                                hasRead = content.length();
-                            }
-                            getActivity().runOnUiThread(()->{
-                                spannableStringBuilder.setSpan(foregroundColorSpan, 0, hasRead, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                tvArticleContent.setText(spannableStringBuilder);
-                            });
-                            break;
+            checkTime();
+        });
+        thread.start();
+    }
+
+    private void checkTime() {
+        for(SentenceData sentenceData : sentenceSplit){
+            //一句一句的执行
+            while(true) {
+                try {
+                    int currentTime = soundManagerForThird.getContentSoundMediaPlayer().getCurrentPosition();
+                    if (currentTime >= sentenceData.getWb()){
+                        int length = sentenceData.getWord().length();
+                        hasRead+= length;
+                        if (hasRead >=content.length()){
+                            hasRead = content.length();
                         }
-                    } catch (Exception e) {
-                        //这段音频已经播放完成了
-                        Log.e("aaaa", "这个音频已经播放完成了");
+                        handler.sendMessage(Message.obtain());
                         break;
                     }
+                } catch (Exception e) {
+                    //这段音频已经播放完成了
+                    Log.e("aaaa", "这个音频已经播放完成了");
+                    break;
                 }
             }
-        }).start();
+        }
     }
 
     private void resetTvArticleContentColor() {

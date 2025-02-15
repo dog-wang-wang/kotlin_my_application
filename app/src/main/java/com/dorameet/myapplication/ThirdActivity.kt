@@ -15,6 +15,7 @@ import com.dorameet.myapplication.data.Result
 import com.dorameet.myapplication.home.data.SortData
 import com.dorameet.myapplication.third.ContentFragment
 import com.dorameet.myapplication.third.ContentFragmentAdapter
+import com.dorameet.myapplication.third.SoundManagerForThird
 import com.dorameet.myapplication.third.data.Content
 import com.dorameet.myapplication.utils.OkHttpUtils
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -34,6 +35,7 @@ class ThirdActivity : AppCompatActivity() {
     var dataList : ArrayList<Fragment> = ArrayList()
     var page:Int =1;
     var sumPage:Int = 1;
+    var soundManagerForThird: SoundManagerForThird? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -78,6 +80,8 @@ class ThirdActivity : AppCompatActivity() {
                         //在这里处理数据
                         val gson = Gson()
                         val data: Result<Content> = gson.fromJson(responseData, (object: TypeToken<Result<Content>>(){}).type)
+                        soundManagerForThird = SoundManagerForThird()
+                        soundManagerForThird?.playBackgroundSound(data.getData()?.bgmUrl!!)
                         //然后展示数据
                         runOnUiThread{
                             sumPage = data.getData()?.readCount!!
@@ -88,13 +92,14 @@ class ThirdActivity : AppCompatActivity() {
                             //然后还要创建出来这五个文章
                             var num: Int = 0
                             data.getData()?.contentList?.forEach {
-                                val fragment = ContentFragment()
+                                val fragment = ContentFragment(soundManagerForThird!!)
                                 fragment.setArguments(Bundle().apply {
                                     // 这里要传两个参数，一个是文章内容，一个是图片地址
                                     putString(getString(R.string.fragment_param_content), it.sentence)
                                     putString(getString(R.string.fragment_param_imgUrl), data.getData()?.imgList?.get(num))
                                     //还需要传递时间切片信息
                                     putString(getString(R.string.fragment_param_sentence_split), it.sentenceByXFList.toString())
+                                    putString(getString(R.string.fragment_param_audioUrl), it.audioUrl.toString())
                                 })
                                 dataList.add(fragment)
                                 num++
@@ -122,5 +127,10 @@ class ThirdActivity : AppCompatActivity() {
         progressBar = findViewById<LinearProgressIndicator>(R.id.third_linear_progress)
         tvNumerator = findViewById<TextView>(R.id.tv_numerator)
         tvDenominator = findViewById<TextView>(R.id.tv_denominator)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        soundManagerForThird?.release()
     }
 }

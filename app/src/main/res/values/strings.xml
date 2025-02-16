@@ -13,4 +13,7 @@
     <string name="shared_user_name">username</string>
     <string name="shared_user_birthday">user_birthday</string>
     <string name="string_library_title">文库</string>
+    <string name="text_third_auto">翻页模式</string>
+    <string name="text_third_rate">倍速调整</string>
+    <string name="text_third_size">字体大小</string>
 </resources>

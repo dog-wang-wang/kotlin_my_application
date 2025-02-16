@@ -1,95 +1,98 @@
-package com.dorameet.myapplication.third;
+package com.dorameet.myapplication.third
 
-import android.media.MediaPlayer;
+import android.media.MediaPlayer
+import android.media.MediaPlayer.OnCompletionListener
 
 /**
  * @author 11230
  */
-public class SoundManagerForThird {
-    private MediaPlayer backgroundSoundMediaPlayer;
-    private MediaPlayer contentSoundMediaPlayer;
-    private String currentContentSoundUrl;
-    private MediaPlayer.OnCompletionListener onCompletionListener;
-
-    public MediaPlayer getBackgroundSoundMediaPlayer() {
-        return backgroundSoundMediaPlayer;
-    }
-
-    public MediaPlayer getContentSoundMediaPlayer() {
-        return contentSoundMediaPlayer;
-    }
+class SoundManagerForThird {
+    var backgroundSoundMediaPlayer: MediaPlayer? = null
+        private set
+    var contentSoundMediaPlayer: MediaPlayer? = null
+        private set
+    private var currentContentSoundUrl: String? = null
+    private val onCompletionListener: OnCompletionListener? = null
 
     //然后分别写两个函数用于控制两个播放器
-    public void playBackgroundSound(String url) {
+    fun playBackgroundSound(url: String?) {
         if (backgroundSoundMediaPlayer == null) {
-            backgroundSoundMediaPlayer = new MediaPlayer();
+            backgroundSoundMediaPlayer = MediaPlayer()
         }
         try {
-            backgroundSoundMediaPlayer.reset();
-            backgroundSoundMediaPlayer.setDataSource(url);
-            backgroundSoundMediaPlayer.prepare();
-            backgroundSoundMediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+            backgroundSoundMediaPlayer!!.reset()
+            backgroundSoundMediaPlayer!!.setDataSource(url)
+            backgroundSoundMediaPlayer!!.prepare()
+            backgroundSoundMediaPlayer!!.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
-    public void playContentSound(String url, MediaPlayer.OnCompletionListener onCompletionListener) {
+
+    fun playContentSound(url: String?, onCompletionListener: OnCompletionListener?) {
         if (contentSoundMediaPlayer == null) {
-            contentSoundMediaPlayer = new MediaPlayer();
-        }else{
-            contentSoundMediaPlayer.stop();
-            contentSoundMediaPlayer.release();
-            contentSoundMediaPlayer = new MediaPlayer();
+            contentSoundMediaPlayer = MediaPlayer()
+        } else {
+            contentSoundMediaPlayer!!.stop()
+            contentSoundMediaPlayer!!.release()
+            contentSoundMediaPlayer = MediaPlayer()
         }
-        currentContentSoundUrl = url;
-        contentSoundMediaPlayer.setOnCompletionListener(onCompletionListener);
+        currentContentSoundUrl = url
+        contentSoundMediaPlayer!!.setOnCompletionListener(onCompletionListener)
         try {
-            contentSoundMediaPlayer.reset();
-            contentSoundMediaPlayer.setDataSource(url);
-            contentSoundMediaPlayer.prepare();
-            contentSoundMediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+            contentSoundMediaPlayer!!.reset()
+            contentSoundMediaPlayer!!.setDataSource(url)
+            contentSoundMediaPlayer!!.prepare()
+            contentSoundMediaPlayer!!.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
-    public void pauseContentSound(){
+
+    fun pauseContentSound() {
         if (contentSoundMediaPlayer != null) {
-            contentSoundMediaPlayer.pause();
+            contentSoundMediaPlayer!!.pause()
         }
     }
-    public void stopContentSound(){
+
+    fun stopContentSound() {
         if (contentSoundMediaPlayer != null) {
-            contentSoundMediaPlayer.stop();
+            contentSoundMediaPlayer!!.stop()
         }
     }
-    public void restartContentSound(){
+
+    fun restartContentSound() {
         if (contentSoundMediaPlayer != null) {
-            contentSoundMediaPlayer.start();
+            contentSoundMediaPlayer!!.start()
         }
     }
-    public void repeatContentSound(){
-        playContentSound(currentContentSoundUrl,onCompletionListener);
+
+    fun repeatContentSound() {
+        playContentSound(currentContentSoundUrl, onCompletionListener)
     }
-    public void releaseBackgroundSound(){
+
+    fun releaseBackgroundSound() {
         if (backgroundSoundMediaPlayer != null) {
-            if (backgroundSoundMediaPlayer.isPlaying()) {
-                backgroundSoundMediaPlayer.stop();
+            if (backgroundSoundMediaPlayer!!.isPlaying) {
+                backgroundSoundMediaPlayer!!.stop()
             }
-            backgroundSoundMediaPlayer.release();
-            backgroundSoundMediaPlayer = null;
+            backgroundSoundMediaPlayer!!.release()
+            backgroundSoundMediaPlayer = null
         }
     }
-    public void releaseContentSound(){
+
+    fun releaseContentSound() {
         if (contentSoundMediaPlayer != null) {
-            if (contentSoundMediaPlayer.isPlaying()) {
-                contentSoundMediaPlayer.stop();
+            if (contentSoundMediaPlayer!!.isPlaying) {
+                contentSoundMediaPlayer!!.stop()
             }
-            contentSoundMediaPlayer.release();
-            contentSoundMediaPlayer = null;
+            contentSoundMediaPlayer!!.release()
+            contentSoundMediaPlayer = null
         }
     }
-    public void release(){
-        releaseBackgroundSound();
-        releaseContentSound();
+
+    fun release() {
+        releaseBackgroundSound()
+        releaseContentSound()
     }
 }

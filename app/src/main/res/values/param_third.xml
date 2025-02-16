@@ -4,4 +4,5 @@
     <string name="fragment_param_imgUrl">imgUrl</string>
     <string name="fragment_param_sentence_split">sentence_split</string>
     <string name="fragment_param_audioUrl">audioUrl</string>
+    <integer name="fragment_init_value">100</integer>
 </resources>

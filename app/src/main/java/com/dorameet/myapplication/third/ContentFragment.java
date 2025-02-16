@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.dorameet.myapplication.R;
 import com.dorameet.myapplication.third.data.SentenceData;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.slider.RangeSlider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -61,6 +63,9 @@ public class ContentFragment extends Fragment {
             });
         }
     };
+    private LinearLayout llSound;
+    private RangeSlider rsSound;
+
     public ContentFragment(SoundManagerForThird soundManagerForThird){
         this.soundManagerForThird = soundManagerForThird;
     }
@@ -119,6 +124,18 @@ public class ContentFragment extends Fragment {
             });
             thread.start();
         });
+        btnSound.setOnClickListener(v->{
+            //用于显示出来音量控制条
+            if (llSound.getVisibility() == View.VISIBLE) {
+                llSound.setVisibility(View.INVISIBLE);
+            }else {
+                llSound.setVisibility(View.VISIBLE);
+            }
+        });
+        rsSound.setValues(100f);
+        rsSound.addOnChangeListener((slider, value, fromUser) -> {
+            soundManagerForThird.getBackgroundSoundMediaPlayer().setVolume(value/100, value/100);
+        });
     }
 
     private void initViews(View view) {
@@ -127,6 +144,8 @@ public class ContentFragment extends Fragment {
         btnRepeat = view.findViewById(R.id.third_btn_repeat);
         ivCover = view.findViewById(R.id.iv_content_background);
         tvArticleContent = view.findViewById(R.id.tv_article_content);
+        llSound = view.findViewById(R.id.ll_sound);
+        rsSound = view.findViewById(R.id.range_slider);
     }
 
     @Override

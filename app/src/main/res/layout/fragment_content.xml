@@ -23,6 +23,7 @@
                 tools:src="@drawable/image_dialog" />
 
             <LinearLayout
+                android:id="@+id/ll_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_background_volumn"
@@ -38,11 +39,12 @@
                     android:id="@+id/range_slider"
                     android:layout_width="90dp"
                     android:layout_height="300dp"
+                    android:orientation="vertical"
                     android:valueFrom="0.0"
                     android:valueTo="100.0"
-                    android:orientation="vertical"
-                    app:trackHeight="3dp"
-                    app:trackColor="@color/color_blue_mid" />
+                    app:thumbColor="@color/color_blue_mid"
+                    app:trackColor="@color/color_blue_mid"
+                    app:trackHeight="3dp" />
             </LinearLayout>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/third_btn_sound"
